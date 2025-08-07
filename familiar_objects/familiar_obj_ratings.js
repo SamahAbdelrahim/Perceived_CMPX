@@ -296,9 +296,9 @@ document.addEventListener('DOMContentLoaded', function () {
         button_html: '<button class="jspsych-btn" style="font-size: 20px; padding: 12px 24px; background-color: #8C1515; color: white; border: none; border-radius: 10px; cursor: pointer;">%choice%</button>'
     };
 
-    timeline.push(practice_instructions);
+    //timeline.push(practice_instructions);
 
-    // Practice trials (using first 3 combinations)
+    // Practice trials (using first 3 combinations) - Video comparison using video-button-response plugin
     var practice_trials = {
         timeline: [
             {
@@ -308,59 +308,59 @@ document.addEventListener('DOMContentLoaded', function () {
                     var video2 = jsPsych.timelineVariable('video2');
                     
                     return `
-                        <div style="text-align: center; padding: 20px;">
-                            <h2 style="font-size: 24px; margin-bottom: 30px; color: #333;">
-                                Which object is more complex?
+                        <div style="text-align: center; padding: 20px; max-width: 1000px; margin: 0 auto;">
+                            <h2 style="font-size: 28px; margin-bottom: 40px; color: #333;">
+                                Practice: Which object is more complex?
                             </h2>
                             
-                            <div class="video-comparison-container">
-                                <div class="video-item">
+                            <div style="display: flex; justify-content: center; align-items: flex-start; gap: 60px; margin: 40px 0;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: #8C1515;">Object A</div>
                                     <video id="video1" src="../video_experiment/videos/${video1}" 
-                                           style="width: 100%; max-width: 350px; height: 250px; object-fit: cover; border-radius: 8px;">
+                                           style="width: 350px; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #8C1515;"
+                                           muted>
                                     </video>
-                                    <div class="video-label">Object A</div>
                                 </div>
                                 
-                                <div class="video-item">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: #8C1515;">Object B</div>
                                     <video id="video2" src="../video_experiment/videos/${video2}" 
-                                           style="width: 100%; max-width: 350px; height: 250px; object-fit: cover; border-radius: 8px;">
+                                           style="width: 350px; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #8C1515;"
+                                           muted>
                                     </video>
-                                    <div class="video-label">Object B</div>
                                 </div>
                             </div>
                             
-                            <div class="comparison-buttons">
-                                <button id="btn-a" class="comparison-btn" disabled>Object A</button>
-                                <button id="btn-b" class="comparison-btn" disabled>Object B</button>
-                            </div>
-                            
-                            <p style="margin-top: 20px; font-size: 16px; color: #666;">
+                            <p id="instruction-text" style="margin-top: 30px; font-size: 18px; color: #666; max-width: 600px; margin-left: auto; margin-right: auto;">
                                 Please wait for both videos to finish playing before making your choice.
                             </p>
                         </div>
                     `;
                 },
-                choices: ['Object A', 'Object B'],
-                button_html: '<button class="comparison-btn" style="display: none;">%choice%</button>',
+                choices: ['Object A is more complex', 'Object B is more complex'],
+                button_html: '<button class="jspsych-btn" style="font-size: 18px; padding: 15px 30px; margin: 15px; background-color: #8C1515; color: white; border: none; border-radius: 8px; cursor: pointer; min-width: 200px;">%choice%</button>',
                 on_load: function() {
                     var video1 = document.getElementById('video1');
                     var video2 = document.getElementById('video2');
-                    var btnA = document.getElementById('btn-a');
-                    var btnB = document.getElementById('btn-b');
+                    var instructionText = document.getElementById('instruction-text');
                     
                     // Start both videos
                     video1.play();
                     video2.play();
                     
-                    // Enable buttons after both videos finish
+                    // Hide buttons initially
+                    var buttons = document.querySelectorAll('.jspsych-btn');
+                    buttons.forEach(btn => btn.style.display = 'none');
+                    
+                    // Show buttons after both videos finish
                     Promise.all([
                         new Promise(resolve => video1.addEventListener('ended', resolve)),
                         new Promise(resolve => video2.addEventListener('ended', resolve))
                     ]).then(() => {
-                        btnA.disabled = false;
-                        btnB.disabled = false;
-                        btnA.style.display = 'inline-block';
-                        btnB.style.display = 'inline-block';
+                        buttons.forEach(btn => btn.style.display = 'inline-block');
+                        instructionText.textContent = 'Compare both objects and choose which one appears more visually complex.';
+                        instructionText.style.color = '#333';
+                        instructionText.style.fontWeight = 'bold';
                     });
                 },
                 on_finish: function(data) {
@@ -370,8 +370,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     jsPsych.data.addDataToLastTrial({
                         video1: video1,
                         video2: video2,
-                        chosen_video: data.response === 'Object A' ? video1 : video2,
-                        chosen_object: data.response,
+                        chosen_video: data.response === 0 ? video1 : video2,
+                        chosen_object: data.response === 0 ? 'Object A' : 'Object B',
                         block: "practice"
                     });
                 }
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
         randomize_order: true
     };
 
-    timeline.push(practice_trials);
+   // timeline.push(practice_trials);
 
     // Main experiment instructions
     var main_instructions = {
@@ -398,9 +398,9 @@ document.addEventListener('DOMContentLoaded', function () {
         button_html: '<button class="jspsych-btn" style="font-size: 20px; padding: 12px 24px; background-color:#8C1515; color:white; border:none; border-radius:8px; cursor:pointer;">%choice%</button>'
     };
 
-    timeline.push(main_instructions);
+    //timeline.push(main_instructions);
 
-    // Main experiment trials
+    // Main experiment trials - Video comparison using video-button-response plugin
     var main_trials = {
         timeline: [
             {
@@ -410,59 +410,59 @@ document.addEventListener('DOMContentLoaded', function () {
                     var video2 = jsPsych.timelineVariable('video2');
                     
                     return `
-                        <div style="text-align: center; padding: 20px;">
-                            <h2 style="font-size: 24px; margin-bottom: 30px; color: #333;">
+                        <div style="text-align: center; padding: 20px; max-width: 1000px; margin: 0 auto;">
+                            <h2 style="font-size: 28px; margin-bottom: 40px; color: #333;">
                                 Which object is more complex?
                             </h2>
                             
-                            <div class="video-comparison-container">
-                                <div class="video-item">
+                            <div style="display: flex; justify-content: center; align-items: flex-start; gap: 60px; margin: 40px 0;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: #8C1515;">Object A</div>
                                     <video id="video1" src="../video_experiment/videos/${video1}" 
-                                           style="width: 100%; max-width: 350px; height: 250px; object-fit: cover; border-radius: 8px;">
+                                           style="width: 350px; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #8C1515;"
+                                           muted>
                                     </video>
-                                    <div class="video-label">Object A</div>
                                 </div>
                                 
-                                <div class="video-item">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 20px; font-weight: bold; margin-bottom: 15px; color: #8C1515;">Object B</div>
                                     <video id="video2" src="../video_experiment/videos/${video2}" 
-                                           style="width: 100%; max-width: 350px; height: 250px; object-fit: cover; border-radius: 8px;">
+                                           style="width: 350px; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #8C1515;"
+                                           muted>
                                     </video>
-                                    <div class="video-label">Object B</div>
                                 </div>
                             </div>
                             
-                            <div class="comparison-buttons">
-                                <button id="btn-a" class="comparison-btn" disabled>Object A</button>
-                                <button id="btn-b" class="comparison-btn" disabled>Object B</button>
-                            </div>
-                            
-                            <p style="margin-top: 20px; font-size: 16px; color: #666;">
+                            <p id="instruction-text" style="margin-top: 30px; font-size: 18px; color: #666; max-width: 600px; margin-left: auto; margin-right: auto;">
                                 Please wait for both videos to finish playing before making your choice.
                             </p>
                         </div>
                     `;
                 },
-                choices: ['Object A', 'Object B'],
-                button_html: '<button class="comparison-btn" style="display: none;">%choice%</button>',
+                choices: ['Object A is more complex', 'Object B is more complex'],
+                button_html: '<button class="jspsych-btn" style="font-size: 18px; padding: 15px 30px; margin: 15px; background-color: #8C1515; color: white; border: none; border-radius: 8px; cursor: pointer; min-width: 200px;">%choice%</button>',
                 on_load: function() {
                     var video1 = document.getElementById('video1');
                     var video2 = document.getElementById('video2');
-                    var btnA = document.getElementById('btn-a');
-                    var btnB = document.getElementById('btn-b');
+                    var instructionText = document.getElementById('instruction-text');
                     
                     // Start both videos
                     video1.play();
                     video2.play();
                     
-                    // Enable buttons after both videos finish
+                    // Hide buttons initially
+                    var buttons = document.querySelectorAll('.jspsych-btn');
+                    buttons.forEach(btn => btn.style.display = 'none');
+                    
+                    // Show buttons after both videos finish
                     Promise.all([
                         new Promise(resolve => video1.addEventListener('ended', resolve)),
                         new Promise(resolve => video2.addEventListener('ended', resolve))
                     ]).then(() => {
-                        btnA.disabled = false;
-                        btnB.disabled = false;
-                        btnA.style.display = 'inline-block';
-                        btnB.style.display = 'inline-block';
+                        buttons.forEach(btn => btn.style.display = 'inline-block');
+                        instructionText.textContent = 'Compare both objects and choose which one appears more visually complex.';
+                        instructionText.style.color = '#333';
+                        instructionText.style.fontWeight = 'bold';
                     });
                 },
                 on_finish: function(data) {
@@ -472,8 +472,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     jsPsych.data.addDataToLastTrial({
                         video1: video1,
                         video2: video2,
-                        chosen_video: data.response === 'Object A' ? video1 : video2,
-                        chosen_object: data.response,
+                        chosen_video: data.response === 0 ? video1 : video2,
+                        chosen_object: data.response === 0 ? 'Object A' : 'Object B',
                         block: "main_experiment"
                     });
                 }
