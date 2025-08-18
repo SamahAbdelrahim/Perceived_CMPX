@@ -1,0 +1,27 @@
+---
+title: "pilot-analysis plan"
+author: 
+date: "2025-08-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#required packages
+```{r packages, message=FALSE}
+library(tidyverse)
+library(lubridate)
+library(readxl)
+library(here)
+library(ggplot2)
+```
+
+read in data
+```{r data}
+pilot_data <- read_csv(here("data", "pilot1.csv"))
+plot_data2 <- read_csv(here("data", "pilot2.csv"))
+pilot_data <- rbind(pilot_data, plot_data2)
+pilot_data <- pilot_data %>% select (-c(stimulus))
+```

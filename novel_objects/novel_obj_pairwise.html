@@ -1,18 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novel Objects Complexity Comparison</title>
     
     <!-- jsPsych CSS -->
-    <link href="/general_assets/jspsych/css/jspsych.css" rel="stylesheet" type="text/css">
+    <link href="../general_assests/jspsych/dist/jspsych.css" rel="stylesheet" type="text/css">
     
     <!-- jsPsych JavaScript -->
-    <script src="/general_assets/jspsych/jspsych.js"></script>
-    <script src="/general_assets/jspsych/plugins/jspsych-instructions.js"></script>
-    <script src="/general_assets/jspsych/plugins/jspsych-html-button-response.js"></script>
+    <script src="../general_assests/jspsych/dist/jspsych.js"></script>
+    <script src="../general_assests/jspsych/dist/plugin-instructions.js"></script>
+    <script src="../general_assests/jspsych/dist/plugin-html-button-response.js"></script>
+    <script src="../general_assests/jspsych/dist/plugin-survey-text.js"></script>
     
+    <!-- Custom CSS -->
+    <link href="../general_assests/experiment.css" rel="stylesheet" type="text/css" />
+
+    <!-- Custom JS - Load in order -->
+    <script src="../general_assests/util_videos.js" defer></script>
+    <!-- Load the experiment script -->
+    <script src="novel_obj_pairwise.js"></script>
+
     <!-- Data logging function -->
     <script>
         // Function to log experiment data
@@ -32,9 +41,6 @@
     </script>
 </head>
 <body>
-    <!-- jsPsych will insert content here -->
-    
-    <!-- Load the experiment script -->
-    <script src="novel_obj_pairwise.js"></script>
+
 </body>
 </html>

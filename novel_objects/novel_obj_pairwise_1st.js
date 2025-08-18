@@ -182,14 +182,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to get all video files from the abstract animations folder structure
     function getAbstractAnimationVideos() {
         const videos = [];
-        const basePath = '/general_assests/25-abstract-animations/';
-
+        const basePath = '/general_assets/25-abstract-animations/';
+        
         // Define the folder structure (folders 1-30)
         const folders = Array.from({length: 30}, (_, i) => i + 1);
-
-        console.log("folders", folders);
         
-        // Use only folders we know exist and have the correct patterns
+        // For each folder, get the 4 beveling level videos
+        // Based on the actual file structure, we need to handle different number patterns
         const folderPatterns = {
             1: '1016', 2: '45', 3: '1016', 4: '68', 5: '1016', 6: '45', 7: '1016', 8: '68',
             9: '1016', 10: '45', 11: '1016', 12: '68', 13: '1016', 14: '45', 15: '1016',
@@ -199,15 +198,15 @@ document.addEventListener('DOMContentLoaded', function () {
         
         folders.forEach(folderNum => {
             const bevelLevels = ['B0', 'B1', 'B2', 'B5'];
-            //const pattern = folderPatterns[folderNum] || '1016'; // fallback pattern
+            const pattern = folderPatterns[folderNum] || '1016'; // fallback pattern
             
             bevelLevels.forEach(bevel => {
-                const videoPath = `${basePath}${folder}/${folder}-${pattern}-${bevel}.mp4`;
+                const videoPath = `${basePath}${folderNum}/${folderNum}-${pattern}-${bevel}.mp4`;
                 videos.push({
                     path: videoPath,
-                    folder: folder,
+                    folder: folderNum,
                     bevel: bevel,
-                    fullName: `${folder}-${pattern}-${bevel}.mp4`
+                    fullName: `${folderNum}-${pattern}-${bevel}.mp4`
                 });
             });
         });
@@ -227,12 +226,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // Function to generate pairwise combinations with randomization
     function generatePairwiseCombinations(videoList) {
         let combinations = [];
-        
-        // Ensure videoList is an array
-        if (!Array.isArray(videoList)) {
-            console.error('videoList is not an array:', videoList);
-            return [];
-        }
         
         // First, randomly select one video from each folder to ensure diversity
         const folders = [...new Set(videoList.map(v => v.folder))];
@@ -272,10 +265,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return shuffleArray(combinations);
     }
 
-    // Remove these console.log calls since getAbstractAnimationVideos is now async
-    // console.log("getAbstractAnimationVideos()", getAbstractAnimationVideos());
-    // console.log("combinatgions", generatePairwiseCombinations(getAbstractAnimationVideos()));
-
     // Main function to initialize the experiment
     function initializeExperiment() {
         // Get all video files
@@ -294,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var trial1 = {
             type: jsPsychInstructions,
             pages: [
-                '<div style="text-align: center; margin-bottom: 10px;"><img src="../general_assests/stanford.png"></div>' +
+                '<div style="text-align: center; margin-bottom: 10px;"><img src="/general_assets/stanford.png"></div>' +
                 '<div style="text-align: center; margin: 0 auto; max-width: 600px; font-size: 18px; line-height: 1.5; color: #333;">' +
                 '<p>By answering the following questions, you are participating in a study being performed by cognitive scientists in the Stanford Department of Psychology.</p>' +
                 '<p>If you have questions about this research, please contact us at <a href="mailto:languagecoglab@gmail.com" style="color: #007bff; text-decoration: none;">languagecoglab@gmail.com</a>.</p>' +
@@ -542,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var goodbye = {
             type: jsPsychInstructions,
             pages: [
-                '<div style="text-align: center; margin: 50px;"><img src="../general_assests/stanford.png"></div>' +
+                '<div style="text-align: center; margin: 50px;"><img src="/general_assets/stanford.png"></div>' +
                 '<div style="text-align: center; margin: 0 auto; max-width: 600px; font-size: 30px;">' +
                 '<p> <b>Thank you for your participation and we appreciate you helping science. </b> </p>' +
                 '<p> please click next to get redirected ...  </p>' +
