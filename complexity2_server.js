@@ -14,15 +14,46 @@ app.use(express.json());
 // Serve static files from the "experiment" directory
 app.use(express.static(path.join(__dirname, 'video_experiment')));
 
+// Serve static files from the "familiar_objects" directory
+app.use('/familiar_objects', express.static(path.join(__dirname, 'familiar_objects')));
+
+// Serve video files from the general_assests directory
+app.use('/general_assests', express.static(path.join(__dirname, 'general_assests')));
+
 // Set up a route for the root URL
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'video_experiment', 'complexity_videos.html'));
+});
+
+// Route for familiar objects experiment
+app.get('/familiar', (req, res) => {
+    res.sendFile(path.join(__dirname, 'familiar_objects', 'familiar_obj_ratings.html'));
 });
 
 // MongoDB connection
 let raw_data = fs.readFileSync('mongo_auth.json');
 let auth = JSON.parse(raw_data);
 let mongoDBUri = `mongodb://${auth.user}:${auth.password}@127.0.0.1:27017/samah?authSource=admin`;
+
+// API endpoint to get video files from videos_familiarobjs directory
+app.get('/api/videos', (req, res) => {
+    try {
+        const videosDir = path.join(__dirname, 'general_assests', 'videos_familiarobjs');
+        const files = fs.readdirSync(videosDir);
+        
+        // Filter only video files (mp4, mov, avi, etc.)
+        const videoFiles = files.filter(file => {
+            const ext = path.extname(file).toLowerCase();
+            return ['.mp4', '.mov', '.avi', '.mkv', '.webm'].includes(ext);
+        });
+        
+        console.log(`Found ${videoFiles.length} video files`);
+        res.json(videoFiles);
+    } catch (error) {
+        console.error('Error reading videos directory:', error);
+        res.status(500).json({ error: 'Failed to read videos directory' });
+    }
+});
 
 // MongoDB
 mongoose.connect(mongoDBUri)

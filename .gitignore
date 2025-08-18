@@ -3,5 +3,10 @@ mongo_auth.json
 
 Data+analysis/models.docx
 .gitignore
-.notes
+.notes.txt
 
+video_experiment/videos/*
+general_assests/25-abstract-animations/*
+/home/samah/projects/perceiving_complexity/general_assests/25-abstract-animations/*
+/home/samah/projects/perceiving_complexity/general_assests/videos_familiarobjs/*
+/home/samah/projects/perceiving_complexity/general_assests/videos_novelobjs/*
